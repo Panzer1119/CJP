@@ -14,10 +14,16 @@
  *    limitations under the License.
  */
 
-package de.codemakers.base;
+import org.junit.Test;
 
-public class Standard {
+public class ReceiverTest {
 
-    public static final String NAME = Standard.class.getName();
+    @Test
+    public final void receiving() throws Exception {
+        System.out.println("My ID: " + JarCommunicator.ID);
+        Thread.sleep(500);
+        JarCommunicator.addListener((data) -> System.out.println(String.format("[%d -> %d]: %s", data.getSourceID(), data.getTargetID(), data.getObject())));
+        Thread.sleep(15000);
+    }
 
 }
