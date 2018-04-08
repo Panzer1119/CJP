@@ -16,8 +16,8 @@
 
 import de.codemakers.base.CJP;
 import de.codemakers.base.io.SerializationUtil;
-import de.codemakers.base.util.JavaScriptEngine;
-import de.codemakers.base.util.JavaScriptEngineBuilder;
+import de.codemakers.base.scripting.JavaScriptEngine;
+import de.codemakers.base.scripting.JavaScriptEngineBuilder;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -50,15 +50,7 @@ public class JShellTest {
                             javaScriptEngine.reset();
                             System.out.println("Resetted the " + JavaScriptEngine.class.getSimpleName());
                         } else if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
-                            System.out.println(String.format("Usage:\n" +
-                                    "/exit - Exits the %s\n" +
-                                    "/get VARIABLE - Returns the DATA for the VARIABLE\n" +
-                                    "/help - Shows this help\n" +
-                                    "/reset - Resets the %s\n" +
-                                    "/set VARIABLE DATA - Sets the DATA to the VARIABLE\n" +
-                                    "/set VARIABLE /eval CODE - Sets the evaluated CODE to the VARIABLE\n" +
-                                    "/toggle auto_add_return - Toggles if a missing \"return\" will be added before each CODE (Value: %b)\n" +
-                                    "/toggle auto_save_results - Toggles if a result from an evaluation should be saved in a VARIABLE (Value: %b)\n", JShellTest.class.getSimpleName(), JavaScriptEngine.class.getSimpleName(), AUTO_ADD_RETURN, AUTO_SAVE_RESULTS));
+                            System.out.println(String.format("Usage:\n" + "/exit - Exits the %s\n" + "/get VARIABLE - Returns the DATA for the VARIABLE\n" + "/help - Shows this help\n" + "/reset - Resets the %s\n" + "/set VARIABLE DATA - Sets the DATA to the VARIABLE\n" + "/set VARIABLE /eval CODE - Sets the evaluated CODE to the VARIABLE\n" + "/toggle auto_add_return - Toggles if a missing \"return\" will be added before each CODE (Value: %b)\n" + "/toggle auto_save_results - Toggles if a result from an evaluation should be saved in a VARIABLE (Value: %b)\n", JShellTest.class.getSimpleName(), JavaScriptEngine.class.getSimpleName(), AUTO_ADD_RETURN, AUTO_SAVE_RESULTS));
                         } else if (line.startsWith("toggle ")) {
                             line = line.substring("toggle ".length());
                             if (line.equalsIgnoreCase("auto_save_results") || line.equalsIgnoreCase("asr")) {

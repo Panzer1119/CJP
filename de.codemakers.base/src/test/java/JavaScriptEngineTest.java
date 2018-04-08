@@ -16,8 +16,8 @@
 
 import de.codemakers.base.CJP;
 import de.codemakers.base.io.SerializationUtil;
-import de.codemakers.base.util.JavaScriptEngine;
-import de.codemakers.base.util.JavaScriptEngineBuilder;
+import de.codemakers.base.scripting.JavaScriptEngine;
+import de.codemakers.base.scripting.JavaScriptEngineBuilder;
 
 import javax.script.ScriptException;
 import java.util.concurrent.TimeUnit;
