@@ -68,7 +68,7 @@ public class JShellTest {
                 ex.printStackTrace();
             }
         }); thread.start();
-        CJP.shutdown().queueAfter(5, TimeUnit.MINUTES);
+        //CJP.shutdown().queueAfter(5, TimeUnit.MINUTES);
     }
 
 }
