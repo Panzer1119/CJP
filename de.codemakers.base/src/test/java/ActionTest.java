@@ -15,22 +15,26 @@
  */
 
 import de.codemakers.base.CJP;
-import de.codemakers.base.rest.RestAction;
+import de.codemakers.base.action.Action;
+import de.codemakers.base.action.ReturnAction;
+import de.codemakers.base.action.RunAction;
 
 import java.util.concurrent.TimeUnit;
 
-public class RestActionTest {
+public class ActionTest {
 
     public static final void main(String[] args) {
-        final RestAction<String> test = RestAction.ofToughSupplier(() -> {
-            Thread.sleep(1000);
-            return "Test 2";
-        });
-        //System.out.println(test.complete());
-        test.queue(System.out::println);
-        for (int i = 0; i < 10000; i++) {
-            System.out.println(i);
-        }
         CJP.shutdown().queueAfter(5, TimeUnit.SECONDS);
+        final ReturnAction<String> test_1 = Action.ofToughSupplier(() -> {
+            Thread.sleep(3000);
+            return "Test 1 Re";
+        });
+        test_1.queue(System.out::println, System.err::println);
+        System.out.println("Test 1");
+        final RunAction test_2 = Action.ofToughRunnable(() -> {
+            Thread.sleep(3000);
+        });
+        test_2.queue(() -> System.out.println("Test 2 Re"), System.err::println);
+        System.out.println("Test 2");
     }
 }

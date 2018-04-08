@@ -16,7 +16,8 @@
 
 package de.codemakers.base;
 
-import de.codemakers.base.rest.RestAction;
+import de.codemakers.base.action.Action;
+import de.codemakers.base.action.RunAction;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,15 +48,12 @@ public class CJP {
         CJP.stopExecutorServiceNow();
     }
 
-    public static final RestAction<Boolean> shutdown() {
+    public static final RunAction shutdown() {
         return shutdown(0);
     }
 
-    public static final RestAction<Boolean> shutdown(int status) {
-        return new RestAction<>(() -> {
-            System.exit(status);
-            return true;
-        });
+    public static final RunAction shutdown(int status) {
+        return Action.ofToughRunnable(() -> System.exit(status));
     }
 
     public static final CJP getInstance() {
