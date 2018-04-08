@@ -57,8 +57,8 @@ public class JShellTest {
                                     "/reset - Resets the %s\n" +
                                     "/set VARIABLE DATA - Sets the DATA to the VARIABLE\n" +
                                     "/set VARIABLE /eval CODE - Sets the evaluated CODE to the VARIABLE\n" +
-                                    "/toggle auto_add_return - Toggles if a missing \"return\" will be added before each CODE\n" +
-                                    "/toggle auto_save_results - Toggles if a result from an evaluation should be saved in a VARIABLE\n", JShellTest.class.getSimpleName(), JavaScriptEngine.class.getSimpleName()));
+                                    "/toggle auto_add_return - Toggles if a missing \"return\" will be added before each CODE (Standard: true)\n" +
+                                    "/toggle auto_save_results - Toggles if a result from an evaluation should be saved in a VARIABLE (Standard: true)\n", JShellTest.class.getSimpleName(), JavaScriptEngine.class.getSimpleName()));
                         } else if (line.startsWith("toggle ")) {
                             line = line.substring("toggle ".length());
                             if (line.equalsIgnoreCase("auto_save_results") || line.equalsIgnoreCase("asr")) {
@@ -113,7 +113,6 @@ public class JShellTest {
             }
         });
         thread.start();
-        //CJP.shutdown().queueAfter(5, TimeUnit.MINUTES);
     }
 
 }
