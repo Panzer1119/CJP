@@ -18,35 +18,35 @@ package de.codemakers.base.action;
 
 import de.codemakers.base.CJP;
 import de.codemakers.base.util.tough.ToughConsumer;
-import de.codemakers.base.util.tough.ToughRunnable;
+import de.codemakers.base.util.tough.ToughSupplier;
 
 import java.util.concurrent.Future;
 
-public class RunAction extends Action<ToughRunnable, Void> {
+public class ReturningAction<T> extends Action<ToughConsumer<T>, T> {
 
-    private final ToughRunnable runnable;
+    private final ToughSupplier<T> supplier;
 
-    public RunAction(ToughRunnable runnable) {
+    public ReturningAction(ToughSupplier<T> supplier) {
         super();
-        this.runnable = runnable;
+        this.supplier = supplier;
     }
 
-    public RunAction(CJP cjp, ToughRunnable runnable) {
+    public ReturningAction(CJP cjp, ToughSupplier<T> supplier) {
         super(cjp);
-        this.runnable = runnable;
+        this.supplier = supplier;
     }
 
-    public final ToughRunnable getRunnable() {
-        return runnable;
+    public final ToughSupplier<T> getSupplier() {
+        return supplier;
     }
 
     @Override
-    public final void queue(ToughRunnable success, ToughConsumer<Throwable> failure) {
+    public final void queue(ToughConsumer<T> success, ToughConsumer<Throwable> failure) {
         cjp.getExecutorService().submit(() -> {
             try {
-                runnable.run();
+                final T t = supplier.get();
                 if (success != null) {
-                    success.actionWithoutException(null);
+                    success.acceptWithoutException(t);
                 }
             } catch (Exception ex) {
                 if (failure != null) {
@@ -59,13 +59,13 @@ public class RunAction extends Action<ToughRunnable, Void> {
     }
 
     @Override
-    public final Future<Void> submit() {
+    public final Future<T> submit() {
         return cjp.getExecutorService().submit(() -> {
             try {
-                runnable.run();
+                return supplier.get();
             } catch (Exception ex) {
+                return null;
             }
-            return null;
         });
     }
 

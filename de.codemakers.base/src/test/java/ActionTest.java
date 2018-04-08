@@ -16,8 +16,8 @@
 
 import de.codemakers.base.CJP;
 import de.codemakers.base.action.Action;
-import de.codemakers.base.action.ReturnAction;
-import de.codemakers.base.action.RunAction;
+import de.codemakers.base.action.ReturningAction;
+import de.codemakers.base.action.RunningAction;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,13 +25,13 @@ public class ActionTest {
 
     public static final void main(String[] args) {
         CJP.shutdown().queueAfter(5, TimeUnit.SECONDS);
-        final ReturnAction<String> test_1 = Action.ofToughSupplier(() -> {
+        final ReturningAction<String> test_1 = Action.ofToughSupplier(() -> {
             Thread.sleep(3000);
             return "Test 1 Re";
         });
         test_1.queue(System.out::println, System.err::println);
         System.out.println("Test 1");
-        final RunAction test_2 = Action.ofToughRunnable(() -> {
+        final RunningAction test_2 = Action.ofToughRunnable(() -> {
             Thread.sleep(3000);
         });
         test_2.queue(() -> System.out.println("Test 2 Re"), System.err::println);

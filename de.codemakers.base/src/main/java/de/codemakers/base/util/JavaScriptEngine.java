@@ -16,7 +16,7 @@
 
 package de.codemakers.base.util;
 
-import de.codemakers.base.action.ReturnAction;
+import de.codemakers.base.action.ReturningAction;
 
 import javax.script.*;
 import java.io.Reader;
@@ -127,8 +127,8 @@ public class JavaScriptEngine implements ScriptEngine {
         return (T) scriptEngine.eval(toFunction(code));
     }
 
-    public final <T> ReturnAction<T> executeLarge(String code) {
-        return new ReturnAction<>(() -> execute(code));
+    public final <T> ReturningAction<T> executeLarge(String code) {
+        return new ReturningAction<>(() -> execute(code));
     }
 
 }

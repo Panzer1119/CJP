@@ -40,20 +40,20 @@ public abstract class Action<T extends Tough, R> {
         this.cjp = cjp;
     }
 
-    public static final <T> ReturnAction<T> ofSupplier(Supplier<T> supplier) {
+    public static final <T> ReturningAction<T> ofSupplier(Supplier<T> supplier) {
         return ofToughSupplier(() -> supplier.get());
     }
 
-    public static final <T> ReturnAction<T> ofToughSupplier(ToughSupplier<T> supplier) {
-        return new ReturnAction<>(supplier);
+    public static final <T> ReturningAction<T> ofToughSupplier(ToughSupplier<T> supplier) {
+        return new ReturningAction<>(supplier);
     }
 
-    public static final RunAction ofRunnable(Runnable runnable) {
+    public static final RunningAction ofRunnable(Runnable runnable) {
         return ofToughRunnable(() -> runnable.run());
     }
 
-    public static final RunAction ofToughRunnable(ToughRunnable runnable) {
-        return new RunAction(runnable);
+    public static final RunningAction ofToughRunnable(ToughRunnable runnable) {
+        return new RunningAction(runnable);
     }
 
     public final void queue() {

@@ -17,7 +17,7 @@
 package de.codemakers.base;
 
 import de.codemakers.base.action.Action;
-import de.codemakers.base.action.RunAction;
+import de.codemakers.base.action.RunningAction;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -48,11 +48,11 @@ public class CJP {
         CJP.stopExecutorServiceNow();
     }
 
-    public static final RunAction shutdown() {
+    public static final RunningAction shutdown() {
         return shutdown(0);
     }
 
-    public static final RunAction shutdown(int status) {
+    public static final RunningAction shutdown(int status) {
         return Action.ofToughRunnable(() -> System.exit(status));
     }
 
