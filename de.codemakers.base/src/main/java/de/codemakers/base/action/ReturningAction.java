@@ -22,6 +22,11 @@ import de.codemakers.base.util.tough.ToughSupplier;
 
 import java.util.concurrent.Future;
 
+/**
+ * Inspired by the RestAction from Austin Keener & Michael Ritter & Florian Spieß
+ *
+ * @param <T> Type input
+ */
 public class ReturningAction<T> extends Action<ToughConsumer<T>, T> {
 
     private final ToughSupplier<T> supplier;

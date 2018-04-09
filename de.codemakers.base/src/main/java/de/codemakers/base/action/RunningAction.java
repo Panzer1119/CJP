@@ -22,6 +22,9 @@ import de.codemakers.base.util.tough.ToughRunnable;
 
 import java.util.concurrent.Future;
 
+/**
+ * Inspired by the RestAction from Austin Keener & Michael Ritter & Florian Spieß
+ */
 public class RunningAction extends Action<ToughRunnable, Void> {
 
     private final ToughRunnable runnable;

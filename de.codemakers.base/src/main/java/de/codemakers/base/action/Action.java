@@ -27,6 +27,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+/**
+ * Inspired by the RestAction from Austin Keener & Michael Ritter & Florian Spieß
+ *
+ * @param <T> Type Input
+ * @param <R> Type Output
+ */
 public abstract class Action<T extends Tough, R> {
 
     final CJP cjp;
