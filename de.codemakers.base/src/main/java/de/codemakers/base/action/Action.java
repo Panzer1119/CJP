@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
- * Inspired by the RestAction from Austin Keener & Michael Ritter & Florian Spieß
+ * Inspired by the RestAction from Austin Keener &amp; Michael Ritter &amp; Florian Spieß
  *
  * @param <T> Type Input
  * @param <R> Type Output
