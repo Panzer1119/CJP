@@ -1,0 +1,71 @@
+/*
+ *    Copyright 2018 Paul Hagedorn (Panzer1119)
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+version '0.1'
+ext.moduleName = 'de.codemakers.base'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.9
+targetCompatibility = 1.9
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileJava {
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        options.compilerArgs = [
+                '--module-path', classpath.asPath,
+        ]
+        classpath = files()
+    }
+}
+
+build {
+    dependsOn clean
+}
+
+jar {
+    destinationDir = new File("E:\\Daten\\IntelliJ\\CJP\\store")
+}
+
+javadoc {
+    failOnError = false;
+    options.memberLevel = JavadocMemberLevel.PUBLIC
+    options.author()
+    options.encoding = 'UTF-8'
+    options.addStringOption('-html5')
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+    destinationDir = new File("E:\\Daten\\IntelliJ\\CJP\\store")
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    destinationDir = new File("E:\\Daten\\IntelliJ\\CJP\\store")
+}
+
+task fatJar(type: Jar) {
+    dependsOn jar
+    dependsOn sourcesJar
+    dependsOn javadocJar
+}
