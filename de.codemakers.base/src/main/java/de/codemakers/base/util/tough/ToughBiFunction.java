@@ -14,5 +14,34 @@
  *    limitations under the License.
  */
 
-include 'de.codemakers.base'
-include 'de.codemakers.sql'
+package de.codemakers.base.util.tough;
+
+public interface ToughBiFunction<T, U, R> extends Tough<T, R> {
+
+    R apply(T t, U u) throws Exception;
+
+    default R applyWithoutException(T t, U u) {
+        try {
+            return apply(t, u);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    default R action(T t) throws Exception {
+        return apply(t, null);
+    }
+
+    @Override
+    default boolean canConsume() {
+        return true;
+    }
+
+    @Override
+    default boolean canSupply() {
+        return true;
+    }
+
+}
