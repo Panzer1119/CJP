@@ -20,6 +20,7 @@ import de.codemakers.base.CJP;
 import de.codemakers.base.util.tough.ToughConsumer;
 import de.codemakers.base.util.tough.ToughSupplier;
 
+import java.util.Objects;
 import java.util.concurrent.Future;
 
 /**
@@ -33,11 +34,13 @@ public class ReturningAction<T> extends Action<ToughConsumer<T>, T> {
 
     public ReturningAction(ToughSupplier<T> supplier) {
         super();
+        Objects.requireNonNull(supplier, "supplier may not be null!");
         this.supplier = supplier;
     }
 
     public ReturningAction(CJP cjp, ToughSupplier<T> supplier) {
         super(cjp);
+        Objects.requireNonNull(supplier, "supplier may not be null!");
         this.supplier = supplier;
     }
 
@@ -45,33 +48,43 @@ public class ReturningAction<T> extends Action<ToughConsumer<T>, T> {
         return supplier;
     }
 
+    public final T direct() {
+        return supplier.getWithoutException();
+    }
+
     @Override
     public final void queue(ToughConsumer<T> success, ToughConsumer<Throwable> failure) {
-        cjp.getExecutorService().submit(() -> {
-            try {
-                final T t = supplier.get();
-                if (success != null) {
-                    success.acceptWithoutException(t);
-                }
-            } catch (Exception ex) {
-                if (failure != null) {
-                    failure.acceptWithoutException(ex);
-                } else {
-                    ex.printStackTrace();
-                }
+        cjp.getFixedExecutorService().submit(() -> run(success, failure));
+    }
+
+    @Override
+    public final void queueSingle(ToughConsumer<T> success, ToughConsumer<Throwable> failure) {
+        cjp.getSingleExecutorService().submit(() -> run(success, failure));
+    }
+
+    private final void run(ToughConsumer<T> success, ToughConsumer<Throwable> failure) {
+        try {
+            final T t = supplier.get();
+            if (success != null) {
+                success.acceptWithoutException(t);
             }
-        });
+        } catch (Exception ex) {
+            if (failure != null) {
+                failure.acceptWithoutException(ex);
+            } else {
+                ex.printStackTrace();
+            }
+        }
     }
 
     @Override
     public final Future<T> submit() {
-        return cjp.getExecutorService().submit(() -> {
-            try {
-                return supplier.get();
-            } catch (Exception ex) {
-                return null;
-            }
-        });
+        return cjp.getFixedExecutorService().submit(supplier::getWithoutException);
+    }
+
+    @Override
+    public final Future<T> submitSingle() {
+        return cjp.getSingleExecutorService().submit(supplier::getWithoutException);
     }
 
 }

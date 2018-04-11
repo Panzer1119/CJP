@@ -41,7 +41,7 @@ build {
 }
 
 jar {
-    destinationDir = new File("E:\\Daten\\IntelliJ\\CJP\\store")
+    destinationDir = new File(OUTPUT_FOLDER)
 }
 
 javadoc {
@@ -55,13 +55,13 @@ javadoc {
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from javadoc.destinationDir
-    destinationDir = new File("E:\\Daten\\IntelliJ\\CJP\\store")
+    destinationDir = new File(OUTPUT_FOLDER)
 }
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
-    destinationDir = new File("E:\\Daten\\IntelliJ\\CJP\\store")
+    destinationDir = new File(OUTPUT_FOLDER)
 }
 
 task fatJar(type: Jar) {

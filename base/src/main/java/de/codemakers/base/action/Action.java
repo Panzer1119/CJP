@@ -62,6 +62,10 @@ public abstract class Action<T extends Tough, R> {
         return new RunningAction(runnable);
     }
 
+    public final CJP getCJP() {
+        return cjp;
+    }
+
     public final void queue() {
         queue(null, null);
     }
@@ -70,11 +74,17 @@ public abstract class Action<T extends Tough, R> {
         queue(success, null);
     }
 
-    public final CJP getCJP() {
-        return cjp;
+    public abstract void queue(T success, ToughConsumer<Throwable> failure);
+
+    public final void queueSingle() {
+        queueSingle(null, null);
     }
 
-    public abstract void queue(T success, ToughConsumer<Throwable> failure);
+    public final void queueSingle(T success) {
+        queueSingle(success, null);
+    }
+
+    public abstract void queueSingle(T success, ToughConsumer<Throwable> failure);
 
     public final void queueAfter(long delay, TimeUnit unit) {
         queueAfter(delay, unit, null, null);
@@ -88,7 +98,21 @@ public abstract class Action<T extends Tough, R> {
         cjp.getScheduledExecutorService().schedule(() -> queue(success, failure), delay, unit);
     }
 
+    public final void queueSingleAfter(long delay, TimeUnit unit) {
+        queueSingleAfter(delay, unit, null, null);
+    }
+
+    public final void queueSingleAfter(long delay, TimeUnit unit, T success) {
+        queueSingleAfter(delay, unit, success, null);
+    }
+
+    public final void queueSingleAfter(long delay, TimeUnit unit, T success, ToughConsumer<Throwable> failure) {
+        cjp.getScheduledExecutorService().schedule(() -> queueSingle(success, failure), delay, unit);
+    }
+
     public abstract Future<R> submit();
+
+    public abstract Future<R> submitSingle();
 
     public final R complete() {
         try {

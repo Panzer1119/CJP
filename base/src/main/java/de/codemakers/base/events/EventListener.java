@@ -14,35 +14,11 @@
  *    limitations under the License.
  */
 
-package de.codemakers.base.util.tough;
+package de.codemakers.base.events;
 
 @FunctionalInterface
-public interface ToughBiConsumer<T, U> extends Tough<T, Void> {
+public interface EventListener<E extends Event> {
 
-    void accept(T t, U u) throws Exception;
-
-    default void acceptWithoutException(T t, U u) {
-        try {
-            accept(t, u);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    default Void action(T t) throws Exception {
-        accept(t, null);
-        return null;
-    }
-
-    @Override
-    default boolean canConsume() {
-        return true;
-    }
-
-    @Override
-    default boolean canSupply() {
-        return false;
-    }
+    <T extends E> void onEvent(T event);
 
 }

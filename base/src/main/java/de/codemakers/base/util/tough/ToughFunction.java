@@ -16,6 +16,7 @@
 
 package de.codemakers.base.util.tough;
 
+@FunctionalInterface
 public interface ToughFunction<T, R> extends Tough<T, R> {
 
     R apply(T t) throws Exception;

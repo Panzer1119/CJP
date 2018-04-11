@@ -16,6 +16,7 @@
 
 package de.codemakers.base.util.tough;
 
+@FunctionalInterface
 public interface ToughPredicate<T> extends Tough<T, Boolean> {
 
     Boolean test(T t) throws Exception;

@@ -32,12 +32,14 @@ public class CJP {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdownInstance()));
     }
 
-    private ExecutorService executorService;
+    private ExecutorService fixedExecutorService;
     private ScheduledExecutorService scheduledExecutorService;
+    private ExecutorService singleExecutorService;
 
-    public CJP(ExecutorService executorService, ScheduledExecutorService scheduledExecutorService) {
-        this.executorService = executorService;
+    public CJP(ExecutorService fixedExecutorService, ScheduledExecutorService scheduledExecutorService) {
+        this.fixedExecutorService = fixedExecutorService;
         this.scheduledExecutorService = scheduledExecutorService;
+        this.singleExecutorService = Executors.newSingleThreadExecutor();
     }
 
     public CJP(int fixedThreadPoolSize) {
@@ -60,33 +62,57 @@ public class CJP {
         return CJP;
     }
 
-    public final ExecutorService getExecutorService() {
-        return executorService;
+    public final ExecutorService getFixedExecutorService() {
+        return fixedExecutorService;
     }
 
     public final ScheduledExecutorService getScheduledExecutorService() {
         return scheduledExecutorService;
     }
 
+    public final ExecutorService getSingleExecutorService() {
+        return singleExecutorService;
+    }
+
     public final CJP stopExecutorServiceNow() {
-        if (executorService != null) {
-            executorService.shutdownNow();
-            executorService = null;
+        if (fixedExecutorService != null) {
+            fixedExecutorService.shutdownNow();
+            fixedExecutorService = null;
+        }
+        if (scheduledExecutorService != null) {
+            scheduledExecutorService.shutdownNow();
+            scheduledExecutorService = null;
+        }
+        if (singleExecutorService != null) {
+            singleExecutorService.shutdownNow();
+            singleExecutorService = null;
         }
         return this;
     }
 
-    public final CJP stopExecutorService(long timeout, TimeUnit unit) {
-        if (executorService == null) {
+    public final CJP stopExecutors(long timeout, TimeUnit unit) {
+        if (fixedExecutorService == null && scheduledExecutorService == null && singleExecutorService == null) {
             return this;
         }
-        try {
-            executorService.shutdown();
-            executorService.awaitTermination(timeout, unit);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        timeout = unit.toMillis(timeout);
+        unit = TimeUnit.MILLISECONDS;
+        timeout = shutdownExecutor(timeout, unit, fixedExecutorService);
+        timeout = shutdownExecutor(timeout, unit, scheduledExecutorService);
+        shutdownExecutor(timeout, unit, singleExecutorService);
         return stopExecutorServiceNow();
+    }
+
+    private final long shutdownExecutor(long timeout, TimeUnit unit, ExecutorService executorService) {
+        final long timestamp = System.currentTimeMillis();
+        if (executorService != null) {
+            try {
+                executorService.shutdown();
+                executorService.awaitTermination(timeout, unit);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return Math.max(0, timeout - (System.currentTimeMillis() - timestamp));
     }
 
 }

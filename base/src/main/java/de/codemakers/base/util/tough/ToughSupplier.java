@@ -16,6 +16,7 @@
 
 package de.codemakers.base.util.tough;
 
+@FunctionalInterface
 public interface ToughSupplier<T> extends Tough<Void, T> {
 
     T get() throws Exception;

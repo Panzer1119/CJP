@@ -14,35 +14,31 @@
  *    limitations under the License.
  */
 
-package de.codemakers.base.util.tough;
+package de.codemakers.steam.events;
 
-@FunctionalInterface
-public interface ToughBiConsumer<T, U> extends Tough<T, Void> {
+import de.codemakers.steam.Steam;
 
-    void accept(T t, U u) throws Exception;
+public class GenericSteamPlayerEvent extends SteamEvent {
 
-    default void acceptWithoutException(T t, U u) {
-        try {
-            accept(t, u);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    final long steamID;
+
+    public GenericSteamPlayerEvent(Steam steam, long steamID) {
+        super(steam);
+        this.steamID = steamID;
+    }
+
+    public GenericSteamPlayerEvent(long id, Steam steam, long steamID) {
+        super(id, steam);
+        this.steamID = steamID;
+    }
+
+    public final long getSteamID() {
+        return steamID;
     }
 
     @Override
-    default Void action(T t) throws Exception {
-        accept(t, null);
-        return null;
-    }
-
-    @Override
-    default boolean canConsume() {
-        return true;
-    }
-
-    @Override
-    default boolean canSupply() {
-        return false;
+    public String toString() {
+        return getClass().getSimpleName() + ": id=" + id + ", steam=" + steam + ", steamID=" + steamID;
     }
 
 }

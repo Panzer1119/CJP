@@ -16,6 +16,7 @@
 
 package de.codemakers.base.util.tough;
 
+@FunctionalInterface
 public interface ToughRunnable extends Tough<Void, Void> {
 
     void run() throws Exception;
