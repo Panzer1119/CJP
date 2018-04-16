@@ -16,8 +16,8 @@
 
 package de.codemakers.base.util;
 
-public interface Copyable<T> {
+public interface Copyable {
 
-    T copy();
+    Copyable copy();
 
 }
