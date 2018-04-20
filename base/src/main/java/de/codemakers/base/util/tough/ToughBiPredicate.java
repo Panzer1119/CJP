@@ -25,17 +25,29 @@ public interface ToughBiPredicate<T, U> extends Tough<T, Boolean> {
         return (t, u) -> !test(t, u);
     }
 
-    default Boolean testWithoutException(T t, U u) {
-        return testWithoutException(t, u, false);
+    default Boolean test(T t, U u, ToughConsumer<Throwable> failure) {
+        return test(t, u, false, failure);
     }
 
-    default Boolean testWithoutException(T t, U u, boolean onError) {
+    default Boolean test(T t, U u, boolean onError, ToughConsumer<Throwable> failure) {
         try {
             return test(t, u);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (failure != null) {
+                failure.acceptWithoutException(ex);
+            } else {
+                ex.printStackTrace();
+            }
             return onError;
         }
+    }
+
+    default Boolean testWithoutException(T t, U u) {
+        return test(t, u, null);
+    }
+
+    default Boolean testWithoutException(T t, U u, boolean onError) {
+        return test(t, u, onError, null);
     }
 
     @Override

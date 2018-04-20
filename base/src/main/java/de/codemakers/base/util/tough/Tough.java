@@ -20,13 +20,21 @@ public interface Tough<T, R> {
 
     R action(T t) throws Exception;
 
-    default R actionWithoutException(T t) throws Exception {
+    default R action(T t, ToughConsumer<Throwable> failure) {
         try {
             return action(t);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (failure != null) {
+                failure.acceptWithoutException(ex);
+            } else {
+                ex.printStackTrace();
+            }
             return null;
         }
+    }
+
+    default R actionWithoutException(T t) {
+        return action(t, null);
     }
 
     boolean canConsume();

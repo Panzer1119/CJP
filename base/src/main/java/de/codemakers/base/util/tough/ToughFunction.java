@@ -21,13 +21,21 @@ public interface ToughFunction<T, R> extends Tough<T, R> {
 
     R apply(T t) throws Exception;
 
-    default R applyWithoutException(T t) {
+    default R apply(T t, ToughConsumer<Throwable> failure) {
         try {
             return apply(t);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (failure != null) {
+                failure.acceptWithoutException(ex);
+            } else {
+                ex.printStackTrace();
+            }
             return null;
         }
+    }
+
+    default R applyWithoutException(T t) {
+        return apply(t, null);
     }
 
     @Override

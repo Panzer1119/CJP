@@ -21,12 +21,20 @@ public interface ToughConsumer<T> extends Tough<T, Void> {
 
     void accept(T t) throws Exception;
 
-    default void acceptWithoutException(T t) {
+    default void accept(T t, ToughConsumer<Throwable> failure) {
         try {
             accept(t);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (failure != null) {
+                failure.acceptWithoutException(ex);
+            } else {
+                ex.printStackTrace();
+            }
         }
+    }
+
+    default void acceptWithoutException(T t) {
+        accept(t, null);
     }
 
     @Override

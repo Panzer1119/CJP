@@ -21,12 +21,20 @@ public interface ToughRunnable extends Tough<Void, Void> {
 
     void run() throws Exception;
 
-    default void runWithoutException() {
+    default void run(ToughConsumer<Throwable> failure) {
         try {
             run();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (failure != null) {
+                failure.acceptWithoutException(ex);
+            } else {
+                ex.printStackTrace();
+            }
         }
+    }
+
+    default void runWithoutException() {
+        run(null);
     }
 
     @Override

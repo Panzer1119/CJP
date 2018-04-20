@@ -25,17 +25,29 @@ public interface ToughPredicate<T> extends Tough<T, Boolean> {
         return (t) -> !test(t);
     }
 
-    default Boolean testWithoutException(T t) {
-        return testWithoutException(t, false);
+    default Boolean test(T t, ToughConsumer<Throwable> failure) {
+        return test(t, false, failure);
     }
 
-    default Boolean testWithoutException(T t, boolean onError) {
+    default Boolean test(T t, boolean onError, ToughConsumer<Throwable> failure) {
         try {
             return test(t);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (failure != null) {
+                failure.acceptWithoutException(ex);
+            } else {
+                ex.printStackTrace();
+            }
             return onError;
         }
+    }
+
+    default Boolean testWithoutException(T t) {
+        return test(t, null);
+    }
+
+    default Boolean testWithoutException(T t, boolean onError) {
+        return test(t, onError, null);
     }
 
     @Override

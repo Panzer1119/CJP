@@ -21,13 +21,21 @@ public interface ToughSupplier<T> extends Tough<Void, T> {
 
     T get() throws Exception;
 
-    default T getWithoutException() {
+    default T get(ToughConsumer<Throwable> failure) {
         try {
             return get();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (failure != null) {
+                failure.acceptWithoutException(ex);
+            } else {
+                ex.printStackTrace();
+            }
             return null;
         }
+    }
+
+    default T getWithoutException() {
+        return get(null);
     }
 
     @Override

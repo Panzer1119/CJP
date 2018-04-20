@@ -21,13 +21,21 @@ public interface ToughBiFunction<T, U, R> extends Tough<T, R> {
 
     R apply(T t, U u) throws Exception;
 
-    default R applyWithoutException(T t, U u) {
+    default R apply(T t, U u, ToughConsumer<Throwable> failure) {
         try {
             return apply(t, u);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (failure != null) {
+                failure.acceptWithoutException(ex);
+            } else {
+                ex.printStackTrace();
+            }
             return null;
         }
+    }
+
+    default R applyWithoutException(T t, U u) {
+        return apply(t, u, null);
     }
 
     @Override

@@ -48,6 +48,10 @@ public class ReturningAction<T> extends Action<ToughConsumer<T>, T> {
         return supplier;
     }
 
+    public final T direct(ToughConsumer<Throwable> failure) {
+        return supplier.get(failure);
+    }
+
     public final T direct() {
         return supplier.getWithoutException();
     }

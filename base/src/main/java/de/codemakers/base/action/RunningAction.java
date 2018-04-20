@@ -46,6 +46,10 @@ public class RunningAction extends Action<ToughRunnable, Void> {
         return runnable;
     }
 
+    public final void direct(ToughConsumer<Throwable> failure) {
+        runnable.run(failure);
+    }
+
     public final void direct() {
         runnable.runWithoutException();
     }
