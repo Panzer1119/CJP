@@ -115,10 +115,19 @@ public abstract class Action<T extends Tough, R> {
     public abstract Future<R> submitSingle();
 
     public final R complete() {
+        return complete(null);
+    }
+
+    public final R complete(ToughConsumer<Throwable> failure) {
         try {
             return submit().get();
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            if (failure != null) {
+                failure.acceptWithoutException(ex);
+                return null;
+            } else {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
