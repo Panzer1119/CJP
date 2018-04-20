@@ -24,7 +24,7 @@ import javax.script.ScriptEngineManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class JavaScriptEngineBuilder implements Copyable<JavaScriptEngineBuilder> {
+public class JavaScriptEngineBuilder implements Copyable {
 
     private final List<String> imports = new ArrayList<>();
 
