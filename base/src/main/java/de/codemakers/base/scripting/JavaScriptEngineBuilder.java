@@ -17,6 +17,7 @@
 package de.codemakers.base.scripting;
 
 import de.codemakers.base.util.Copyable;
+import de.codemakers.base.util.StringUtil;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -54,7 +55,7 @@ public class JavaScriptEngineBuilder implements Copyable<JavaScriptEngineBuilder
         if (imports == null) {
             return this;
         }
-        this.imports.addAll(imports);
+        this.imports.addAll(imports.stream().filter(Objects::nonNull).filter(StringUtil::isNotEmpty).collect(Collectors.toList()));
         return this;
     }
 
@@ -68,6 +69,14 @@ public class JavaScriptEngineBuilder implements Copyable<JavaScriptEngineBuilder
         }
         classes.stream().filter(Objects::nonNull).map((clazz) -> "Packages." + clazz.getName()).forEach(imports::add);
         return this;
+    }
+
+    public final JavaScriptEngineBuilder addImportsFromPackages(boolean recursive, String... packages) {
+        return addImportsFromPackages(recursive, Arrays.asList(packages));
+    }
+
+    public JavaScriptEngineBuilder addImportsFromPackages(boolean recursive, List<String> packages) {
+        throw new RuntimeException("Not implemented!");
     }
 
     public final JavaScriptEngineBuilder addImportsFromObjects(Object... objects) {
