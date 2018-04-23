@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-ext.set("OUTPUT_FOLDER", "E:\\Daten\\IntelliJ\\CJP\\store")
+ext.set("OUTPUT_FOLDER", "E:\\Daten\\IntelliJ\\CJP_1.8\\store")
 
 allprojects {
     repositories {
